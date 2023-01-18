@@ -6,7 +6,7 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 15:32:38 by rliu              #+#    #+#             */
-/*   Updated: 2023/01/13 17:20:50 by rliu             ###   ########.fr       */
+/*   Updated: 2023/01/18 17:27:02 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,19 @@
 #define UTILS_HPP
 
 #include <iostream>
-#include <cstdef>
+#include <cstddef>
 
 namespace ft{
-template <class T, T v>{
+  
+template <class T, T v>
+struct integral_constant{
     static const T                  value = v;
     typedef T                       value_type;
     typedef integral_constant<T,v>  type;
     operator T(){return v;}         
-}
+};
+
+/*class false_type: Instantitation of integral_constant to represent the bool value true*/
 typedef integral_constant<bool,true> true_type;
 
 /*class false_type: Instantitation of integral_constant to represent the bool value false.*/
