@@ -6,7 +6,7 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 12:21:10 by rliu              #+#    #+#             */
-/*   Updated: 2023/01/23 19:15:35 by rliu             ###   ########.fr       */
+/*   Updated: 2023/01/23 20:26:57 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ namespace ft{
         typedef typename allocator_type::const_reference                const_reference;
         typedef typename allocator_type::pointer                        pointer;
         typedef typename allocator_type::const_pointer                  const_pointer;
-        typedef T*                                                 iterator;
-        typedef T* const                                           const_iterator;
+        typedef T*                                                      iterator;
+        typedef const T*                                                const_iterator;
         typedef std::reverse_iterator<iterator>                         reverse_iterator;
         typedef std::reverse_iterator<const_iterator>                   const_reverse_iterator;
         typedef typename ft::iterator_traits<iterator>::difference_type  difference_type;
