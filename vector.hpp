@@ -6,7 +6,7 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 12:21:10 by rliu              #+#    #+#             */
-/*   Updated: 2023/01/18 18:03:53 by rliu             ###   ########.fr       */
+/*   Updated: 2023/01/23 19:15:35 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 namespace ft{
 
-   template<class T, class Allocator = std::allocator<T>>
+   template<class T, class Allocator = std::allocator<T> >
    class vector{
     public:
     
@@ -49,7 +49,7 @@ namespace ft{
         // constructors and destructors
         
         explicit vector(const allocator_type& alloc = allocator_type()):
-            _allocator(alloc),_capacity(0),_size(0), _array(0){}
+            _allocator(alloc),_capacity(0), _array(0), _size(0){}
             
         explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()):
             _allocator(alloc), _capacity(n),_size(n){
@@ -100,16 +100,17 @@ namespace ft{
             {
                 clear();
                 reserve(last - first);
-                iterator itend = this->end();
-                for (;first != last; first++) {
-                  _allocator.construct(itend++, *first);
+                iterator it = this->_array;
+                for (;first != last; first++, this->_size++) {
+                  _allocator.construct(it++, *first);
                 }
             }
             
         void assign (size_type n, const value_type& val){
             clear();
             reserve(n);
-            iterator it=this->end();
+            this->_size = n;
+            iterator it=this->_array;
             while(n-- > 0)
                 _allocator.construct(it++, val);
         }
@@ -141,7 +142,7 @@ namespace ft{
 
         size_type capacity() const {return (this->_capacity);}
 
-        bool empty() const {return (this->size == 0);}
+        bool empty() const {return (this->size() == 0);}
 
         void reserve (size_type n){
               if (n > max_size())
@@ -155,9 +156,9 @@ namespace ft{
                 
                 this->_array = _allocator.allocate(n);
                 this->_capacity =  n;
+                iterator it = this->_array;
                 while(pre_begin != pre_end){
-                  _allocator.construct(pre_begin, *pre_begin);
-                  pre_begin++;
+                  _allocator.construct(it++, *pre_begin++);
                 }
                 _allocator.deallocate(pre_begin - pre_size, pre_cap);
             }
@@ -193,14 +194,14 @@ namespace ft{
         // memeber function - modifiers
         
         void push_back (const value_type& val){
-            if (this->_end == this->_capacity){    
+            if (this->_size== this->_capacity){    
                 size_type n = (size()> 0? capacity()*2:1);
                 reserve(n);
-                _allocator.construct(this->_end, val);
-                this->_end++;
-                this->_size++;
-                this->_capaccity = n;
+                this->_capacity = n;
             }
+            _allocator.construct(this->end(), val);
+            this->_size++;
+            
         }
         void pop_back(){
             if (this->_size > 0){
@@ -221,7 +222,6 @@ namespace ft{
                         _allocator.construct(this->end++, val);
                 }
         }
-
 
             iterator insert (iterator position, const value_type& val){
               size_type diff = position - begin();  
@@ -302,8 +302,9 @@ namespace ft{
             iterator itend = this->end();
             while(n-- > 0)
                 this->_allocator.destroy(--itend);
-        }
-
+            this->_size = 0;
+         }
+            
     private:
         allocator_type      _allocator;
         size_type           _capacity;

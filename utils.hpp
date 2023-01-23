@@ -6,7 +6,7 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 15:32:38 by rliu              #+#    #+#             */
-/*   Updated: 2023/01/18 17:27:02 by rliu             ###   ########.fr       */
+/*   Updated: 2023/01/23 14:49:21 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ template<> struct is_integral<unsigned int>: public true_type{};
 template<> struct is_integral<unsigned long int>: public true_type{};
 template<> struct is_integral<unsigned long long int>: public true_type{};
 template <bool Cond, class T = void> 
-struct enable_if{}; 
+struct enable_if{};
 
 template<class T> 
 struct enable_if<true, T> { typedef T type; };
@@ -170,9 +170,7 @@ template <class Arg1, class Arg2, class Result>
   struct binary_function {
     typedef Arg1 first_argument_type;
     typedef Arg2 second_argument_type;
-    typedef Result result_type;
-    
+    typedef Result result_type;    
 };
-
 }
 #endif
