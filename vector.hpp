@@ -6,7 +6,7 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 12:21:10 by rliu              #+#    #+#             */
-/*   Updated: 2023/01/23 20:26:57 by rliu             ###   ########.fr       */
+/*   Updated: 2023/01/24 15:58:17 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,24 +60,24 @@ namespace ft{
         template<class InputIterator> 
         vector(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, 
             const allocator_type& alloc = allocator_type()):_allocator(alloc){
-                _size = last - first;
-                _capacity = _size;
-                _array = _allocator.allocate(_capacity);
+                this->_size = last - first;
+                this->_capacity =this->_size;
+                this->_array = _allocator.allocate(this->_capacity);
                 std::copy(first, last, this->begin);
             }
         
         /********************************************************************************************/
         //    const allocator_type& alloc = allocator_type();
 
-        vector(const vector& x): _allocator(x.get_allocator()), _capacity(x.capacity())
+        vector(const vector& x): _allocator(x.get_allocator()),_capacity(x.capacity()),_size(x.size())
         {
             this->_array = this->_allocator.allocate(this->_capacity);
             std::copy(x.begin(), x.end(), this->begin());
         }
         
         ~vector(){
-            clear();
-            _allocator.deallocate(this->begin(), capacity());
+            this->clear();
+            this->_allocator.deallocate(this->begin(), capacity());
         }
         
         /*******************************************************************************************/
@@ -85,8 +85,8 @@ namespace ft{
         
         vector& operator= (const vector& x){    
             
-            clear();
-            _allocator.deallocate();
+            this->clear();
+            this->_allocator.deallocate();
             this->_capacity = x.capacity();
             this->_size = x.size();
             this->_array = this->_allocator.allocate(this->_capacity);
@@ -98,21 +98,21 @@ namespace ft{
         void assign (InputIterator first, InputIterator last, 
             typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
             {
-                clear();
-                reserve(last - first);
+                this->clear();
+                this->reserve(last - first);
                 iterator it = this->_array;
                 for (;first != last; first++, this->_size++) {
-                  _allocator.construct(it++, *first);
+                    this->_allocator.construct(it++, *first);
                 }
             }
             
         void assign (size_type n, const value_type& val){
-            clear();
-            reserve(n);
+            this->clear();
+            this->reserve(n);
             this->_size = n;
             iterator it=this->_array;
             while(n-- > 0)
-                _allocator.construct(it++, val);
+                this->_allocator.construct(it++, val);
         }
         
          allocator_type get_allocator() const {return this->_allocator; }
@@ -154,13 +154,13 @@ namespace ft{
                 pointer pre_end = this->end();
                 size_type pre_cap = capacity();
                 
-                this->_array = _allocator.allocate(n);
+                this->_array = this->_allocator.allocate(n);
                 this->_capacity =  n;
                 iterator it = this->_array;
                 while(pre_begin != pre_end){
-                  _allocator.construct(it++, *pre_begin++);
+                    this->_allocator.construct(it++, *pre_begin++);
                 }
-                _allocator.deallocate(pre_begin - pre_size, pre_cap);
+                this->_allocator.deallocate(pre_begin - pre_size, pre_cap);
             }
         }
         /*******************************************************************************************/
@@ -182,7 +182,7 @@ namespace ft{
             return *(this->begin() + n);
         }
         
-        reference front() { return *(this->benin());}
+        reference front() { return *(this->begin());}
         
         const_reference front() const { return * (this->begin());}
         
@@ -199,7 +199,7 @@ namespace ft{
                 reserve(n);
                 this->_capacity = n;
             }
-            _allocator.construct(this->end(), val);
+            this->_allocator.construct(this->end(), val);
             this->_size++;
             
         }
@@ -212,53 +212,58 @@ namespace ft{
         
         void resize (size_type n, value_type val = value_type()){
                 if (n < this->_size){
+                    iterator itend = this->end();
                     while(n < this->_size--)
-                        _allocator.destroy(this->_end--);
+                        this->_allocator.destroy(itend--);
+                    this->_size++;
                 }
                 else{
                     if (n > capacity())
                         reserve(n);
-                    while(_size++ < n)
-                        _allocator.construct(this->end++, val);
+                    iterator itend =this->end();
+                    while(this->_size++ < n)
+                    {
+                        this->_allocator.construct(itend++, val);
                 }
+                this->_size--;
         }
-
-            iterator insert (iterator position, const value_type& val){
-              size_type diff = position - begin();  
-              insert(position, 1, val);
-              return iterator(begin() + diff);
-            }
-            //fill (2)	
-            void insert (iterator position, size_type n, const value_type& val) {
-              size_type diff = position - begin(); 
-              resize(size() + n);
-              position = begin() + diff; 
-              size_type diff_right = (end() - n) - position; //插入到结尾距离
-              pointer pre_end = this->_end - n - 1;
-              for(size_type i = 0; i < diff_right; i++)
-                  *(this->_end - 1 - i) = *pre_end--;
-              for(size_type i = 0; i < n; i++)
-                *(position + i) = val;
-            }
+    }
+        iterator insert (iterator position, const value_type& val){
+            size_type diff = position - begin();  
+            insert(position, 1, val);
+            return iterator(begin() + diff);
+        }
+        //fill (2)	
+        void insert (iterator position, size_type n, const value_type& val) {
+            size_type diff = position - begin(); 
+            resize(size() + n);
+            position = begin() + diff; 
+            size_type diff_right = (end() - n) - position; //插入到结尾距离
+            pointer pre_end = this->end() - n - 1;
+            for(size_type i = 0; i < diff_right; i++)
+                *(this->end() - 1 - i) = *pre_end--;
+            for(size_type i = 0; i < n; i++)
+            *(position + i) = val;
+        }
+        
+        //range (3)
+        template <class InputIterator>
+        void insert (iterator position, InputIterator first, InputIterator last,
+        typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+        {
+            size_type diff = position - begin(); 
+            size_type n = last - first;
+            size_type diff_right = end() - position; 
             
-            //range (3)
-            template <class InputIterator>
-            void insert (iterator position, InputIterator first, InputIterator last,
-            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
-            {
-              size_type diff = position - begin(); 
-              size_type n = last - first;
-              size_type diff_right = end() - position; 
-              
-              resize(size() + n); 
-              position = begin() + diff; 
-              pointer pre_end = this->_end - n - 1;
-              for(size_type i = 0; i < diff_right; i++)
-                 *(this->_end - 1 - i) = *pre_end--;
-              for(size_type j = 0; j < n && first != last ; j++, first++)
-                *(position + j) = *first;
-            }
-            
+            resize(size() + n); 
+            position = begin() + diff; 
+            pointer pre_end = this->end() - n - 1;
+            for(size_type i = 0; i < diff_right; i++)
+                *(this->end() - 1 - i) = *pre_end--;
+            for(size_type j = 0; j < n && first != last ; j++, first++)
+            *(position + j) = *first;
+        }
+        
 
         iterator erase (iterator position){
 
@@ -337,12 +342,12 @@ template <class T, class Alloc>
 
 template <class T, class Alloc>
   bool operator<= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs){
-    return !(rhs > lhs);
+    return !(lhs > rhs);
 }
 
 template <class T, class Alloc>
   bool operator>= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs){
-    return !(lhs < rhs);
+    return (!(lhs < rhs));
 }
 
 /*Exchange contents of vectors*/
@@ -350,5 +355,5 @@ template <class T, class Alloc>
   void swap (ft::vector<T,Alloc>& x, ft::vector<T,Alloc>& y){
      x.swap(y);
   }
-}
+};
 #endif
