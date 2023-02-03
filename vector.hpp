@@ -6,7 +6,7 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 12:21:10 by rliu              #+#    #+#             */
-/*   Updated: 2023/01/24 15:58:17 by rliu             ###   ########.fr       */
+/*   Updated: 2023/02/03 14:46:36 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ namespace ft{
         // memeber function - modifiers
         
         void push_back (const value_type& val){
-            if (this->_size== this->_capacity){    
+            if (this->_size == this->_capacity){    
                 size_type n = (size()> 0? capacity()*2:1);
                 reserve(n);
                 this->_capacity = n;

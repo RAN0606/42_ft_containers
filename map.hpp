@@ -6,7 +6,7 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 16:27:55 by rliu              #+#    #+#             */
-/*   Updated: 2023/01/30 14:33:22 by rliu             ###   ########.fr       */
+/*   Updated: 2023/02/03 14:10:17 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ namespace ft{
     template<class Key, class T, class Compare = std::less<key_type>, class A = std::allocator<pair<const Key, T> > >  >
     class map{
         public:
-            typedef Key                key_type;
-            typedef T                  mapped_type;
-            typedef parir<const key_type, mapped_type>      value_type;
+            typedef Key                                     key_type;
+            typedef T                                       mapped_type;
+            typedef std::pair<const key_type, mapped_type>  value_type;
             typedef Compare                                 key_compare;
 
         private:
@@ -58,10 +58,10 @@ namespace ft{
             typedef typename allocator_type::pointer            pointer;
             typedef typename allocator_type::const_pointer      const_pointer;
 
-            typedef t_iterator<node_type>                       iterator;
-            typedef t_const_iterator<node_type>                 const_iterator;
-            typedef std::reverse_iterator<iterator>              reverse_iterator;
-            typedef std::reverse_iterator<const_iterator>        const_reverse_iterator;
+            // typedef t_iterator<node_type>                       iterator;
+            // typedef t_const_iterator<node_type>                 const_iterator;
+            // typedef std::reverse_iterator<iterator>              reverse_iterator;
+            // typedef std::reverse_iterator<const_iterator>        const_reverse_iterator;
     
             explicit map(const key_compare &comp = key_compare(), \
                         const allocator_type &alloc = allocator_type())
