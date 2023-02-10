@@ -1,0 +1,15 @@
+self assignation test
+true
+BOB(5, test(test, 5)) : 
+3 3 3 
+3 3 3 
+3 3 3 
+3 3 3 
+3 3 3 
+
+CTORS
+Empty is empty ? true
+BOB is empty? false
+Size of JOHN 0
+Size of BOB 5
+Size of MIKE 5
