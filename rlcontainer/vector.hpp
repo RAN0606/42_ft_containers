@@ -6,7 +6,7 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 12:21:10 by rliu              #+#    #+#             */
-/*   Updated: 2023/02/10 11:39:55 by rliu             ###   ########.fr       */
+/*   Updated: 2023/02/14 17:20:23 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 # include <memory>
 # include <algorithm>
 # include <iterator>
-#include <stdexcept>
-#include <exception>
-#include <limits>
-#include "iterator.hpp"
+# include <stdexcept>
+# include <exception>
+# include <limits>
+# include "iterator.hpp"
 # include "utils.hpp"
 
 namespace ft{
@@ -210,24 +210,14 @@ namespace ft{
             }
         }
         
-        void resize (size_type n, value_type val = value_type()){
-                if (n < this->_size){
-                    iterator itend = this->end();
-                    while(n < this->_size--)
-                        this->_allocator.destroy(itend--);
-                    this->_size++;
-                }
-                else{
-                    if (n > capacity())
-                        reserve(n);
-                    iterator itend =this->end();
-                    while(this->_size++ < n)
-                    {
-                        this->_allocator.construct(itend++, val);
-                }
-                this->_size--;
+        void resize (size_type n, value_type val = value_type() ){
+            if (n < size())
+                erase(begin() + n, end());
+            else
+                insert(end(), n - size(), val);        
         }
-    }
+    //    void resize(size_type n){ resize(n, T());}
+        
         iterator insert (iterator position, const value_type& val){
             size_type diff = position - begin();  
             insert(position, 1, val);
@@ -235,16 +225,55 @@ namespace ft{
         }
         //fill (2)	
         void insert (iterator position, size_type n, const value_type& val) {
-            size_type diff = position - begin(); 
-            resize(size() + n);
-            position = begin() + diff; 
-            size_type diff_right = (end() - n) - position; //插入到结尾距离
-            pointer pre_end = this->end() - n - 1;
-            for(size_type i = 0; i < diff_right; i++)
-                *(this->end() - 1 - i) = *pre_end--;
-            for(size_type i = 0; i < n; i++)
-            *(position + i) = val;
+            if (n != 0){
+                if(capacity()-size() >= n){
+                    T value_copy = val;
+                    const size_type elems_after = end() - position;
+                    iterator oldend = end();
+                    if (elems_after > n){
+                        uninitialized_copy(end()-n, end(), end());
+                        _size += n;
+                        copy_backward(position, oldend -n, oldend);
+                        fill(position, position + n, value_copy);    
+                    }
+                    else{
+                        uninitialized_fill_n(end(), n - elems_after, value_copy);
+                        _size += n - elems_after;
+                        uninitialized_copy(position, oldend, end());
+                        _size += n - elems_after;
+                        fill(position, oldend, value_copy);
+                    }
+                }
+                else{
+                    const size_type old_size = size();
+                    const size_type len = old_size + std::max(old_size, n);
+                    iterator new_array = _allocator.allocate(len);
+                    iterator new_end = new_array;
+                    new_end = uninitialized_copy(_array, position, new_array );
+                    new_end = uninitialized_fill_n(new_end, n, val);
+                    new_end = uninitialized_copy(position, end(), new_end);    
+            
+                    this->clear();
+                    this->_allocator.deallocate(this->begin(), this->capacity());
+                    this->_array = new_array;
+                    _size = new_end - new_array;
+                    _capacity = len;
+                }
+            }
+        
+            // if (n !=0){
+            // size_type diff = position - begin(); 
+            
+            // resize(size() + n)
+            // position = begin() + diff; 
+            // size_type diff_right = (end() - n) - position; //插入到结尾距离
+            // pointer pre_end = this->end() - n - 1;
+            // for(size_type i = 0; i < diff_right; i++)
+            //     *(this->end() - 1 - i) = *pre_end--;
+            // for(size_type i = 0; i < n; i++)
+            // *(position + i) = val;
         }
+        
         
         //range (3)
         template <class InputIterator>
@@ -266,19 +295,19 @@ namespace ft{
         
 
         iterator erase (iterator position){
-
-            this->get_allocator().destroy(position);
-            std::copy(position + 1, this->end(), position);   
+            if(position + 1 != end())
+              std::copy(position + 1, this->end(), position);     
             this->get_allocator().destroy(this->end() - 1);
             --this->_size;
             return (position);
         }
         
         iterator erase (iterator first, iterator last){
-                for (iterator it = first; it < last; ++it)
-                    this->get_allocator().destroy(&*it);
-                std::copy(last, this->end(), first);   
+                iterator i=std::copy(last, this->end(), first);
+                iterator ite = this->end();
                 this->_size -= (last - first);
+                while (--ite >= i)
+                    this->get_allocator().destroy(ite); 
                 return (first);
         }
         
@@ -310,11 +339,11 @@ namespace ft{
             this->_size = 0;
          }
             
-    private:
+    protected:
         allocator_type      _allocator;
         size_type           _capacity;
         pointer             _array;
-        size_type           _size; 
+        size_type           _size;
     };
     
 template <class T, class Alloc>
