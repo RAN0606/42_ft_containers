@@ -6,7 +6,7 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 12:21:10 by rliu              #+#    #+#             */
-/*   Updated: 2023/02/15 21:00:56 by rliu             ###   ########.fr       */
+/*   Updated: 2023/02/17 15:10:38 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ namespace ft{
 
         void reserve (size_type n){
               if (n > max_size())
-                throw std::length_error("vector");
+                throw std::length_error("vector::reserve");
               if (n > capacity()) {
                 
                 pointer pre_begin = this->begin();
@@ -301,31 +301,36 @@ namespace ft{
         void insert (iterator position, InputIterator first, InputIterator last,
         typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
         {
+             size_type n = last - first;
+            const size_type old_size = size();
+            const size_type len = std::max(old_size + n, capacity());
+            iterator new_array = _allocator.allocate(len);
+            iterator new_end = new_array;
+            new_end = std::uninitialized_copy(_array, position, new_array );
+            new_end = std::uninitialized_copy(first, last, new_end);
+            new_end = std::uninitialized_copy(position, end(), new_end);    
+    
+            this->clear();
+            this->_allocator.deallocate(this->begin(), this->capacity());
+            this->_array = new_array;
+            _size = new_end - new_array;
+            _capacity = len;
 
+            
+            // size_type diff = position - begin(); 
             // size_type n = last - first;
-            // if (n != 0){
-                
+            // size_type diff_right = end() - position; 
+            // resize(size() + n); 
+            // position = begin() + diff; 
+            // pointer pre_end = this->end() - n - 1;
+            // for(size_type i = 0; i < diff_right; i++){
+            //     _allocator.destroy(this->end()-1-i);
+            //     _allocator.construct(this->end()-1 -i, *pre_end--);
             // }
-            
-            // while (n-- > 0){
-            //     --last;
-            //     insert (position, *last);}
-                
-            
-            size_type diff = position - begin(); 
-            size_type n = last - first;
-            size_type diff_right = end() - position; 
-            resize(size() + n); 
-            position = begin() + diff; 
-            pointer pre_end = this->end() - n - 1;
-            for(size_type i = 0; i < diff_right; i++){
-                _allocator.destroy(this->end()-1-i);
-                _allocator.construct(this->end()-1 -i, *pre_end--);
-            }
-            for(size_type j = 0; j < n && first != last ; j++, first++){
-                _allocator.destroy(position + j);
-                _allocator.construct(position + j, *first);
-            }
+            // for(size_type j = 0; j < n && first != last ; j++, first++){
+            //     _allocator.destroy(position + j);
+            //     _allocator.construct(position + j, *first);
+            // }
                 
         }
         

@@ -112,9 +112,9 @@ namespace ft{
 			typedef	typename	allocator_type::pointer					pointer;
 			typedef	typename	allocator_type::const_pointer			const_pointer;
 
-			/** @note usually the same as ptrdiff_t */
+		
 			typedef	typename	allocator_type::difference_type			difference_type;
-			/** @note usually the same as size_t */
+
 			typedef	typename	allocator_type::size_type				size_type;
 
 		public:
