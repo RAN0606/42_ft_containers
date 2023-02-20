@@ -86,13 +86,6 @@ namespace ft{
 			}
 	};
 
-/**
- * @class template: RBT
- */
-
-	/**
-	 * @brief Red Black Tree
-	 */
 	template < class T,
 		class Compare,
 		class Node = ft::RBT_Node<T>,

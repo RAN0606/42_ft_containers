@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../vector.hpp"
+#include "../container/vector.hpp"
 #include <vector>
 #include "test.hpp"
 #define TESTED_TYPE int
@@ -500,3 +500,6 @@ void test_vector(void){
     test_cmp();
 }
 
+int main(){
+    test_vector();
+}

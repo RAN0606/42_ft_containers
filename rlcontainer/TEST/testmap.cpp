@@ -6,23 +6,23 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 15:03:52 by rliu              #+#    #+#             */
-/*   Updated: 2023/02/17 19:57:10 by rliu             ###   ########.fr       */
+/*   Updated: 2023/02/20 17:07:33 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iomanip>
 #include <iostream>
 #include <string>
-#include "../map.hpp"
+#include "../container/map.hpp"
 #include <map>
-#include "../treeIte.hpp"
-#include "test.hpp"
+#include "../container/treeIte.hpp"
+
 
 #define T1 int
 #define T2 int
 
-using namespace TESTED_NAMESPACE;
 
+using namespace TESTED_NAMESPACE;
 bool fncomp (char lhs, char rhs) {return lhs<rhs;}
 
 struct classcomp {
@@ -450,4 +450,8 @@ void test_map (void)
     map_relationa_ops();
     map_swap_swap();
 	
+}
+
+int main(){
+  test_map();
 }

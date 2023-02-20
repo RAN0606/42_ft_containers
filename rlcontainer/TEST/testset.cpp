@@ -6,11 +6,11 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 19:19:50 by rliu              #+#    #+#             */
-/*   Updated: 2023/02/17 19:57:18 by rliu             ###   ########.fr       */
+/*   Updated: 2023/02/20 17:04:24 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../set.hpp"
+#include "../container/set.hpp"
 #include <set>
 #include "test.hpp"
 
@@ -345,4 +345,8 @@ void test_set(void){
       set_value_comp();
       set_relation_ops();
       set_swap_swap();
+}
+int main()
+{
+  test_set();
 }

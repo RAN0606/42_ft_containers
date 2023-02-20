@@ -1,4 +1,4 @@
-#include "../stack.hpp"
+#include "../container/stack.hpp"
 #include <stack>
 #include "test.hpp"
 
@@ -77,4 +77,8 @@ void test_stack(void){
     stack_size();
     stack_top();
 
+}
+int main()
+{
+  test_stack();
 }

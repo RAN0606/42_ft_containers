@@ -6,11 +6,9 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 15:04:20 by rliu              #+#    #+#             */
-/*   Updated: 2023/02/09 15:04:21 by rliu             ###   ########.fr       */
+/*   Updated: 2023/02/20 14:05:03 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #ifndef TREEITE_HPP
 # define TREEITE_HPP
@@ -23,14 +21,6 @@
 
 namespace ft{
 
-/**
- * @class template: treeIterator
- */
-
-	/**
-	 * @class template: treeIterator
-	 * @brief bidirectional iterator
-	 */
 	template < class T, class Node >
 	class treeIterator : public ft::iterator<bidirectional_iterator_tag, T> {
 		public:

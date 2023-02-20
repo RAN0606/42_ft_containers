@@ -6,7 +6,7 @@
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 16:53:58 by rliu              #+#    #+#             */
-/*   Updated: 2023/02/17 20:38:37 by rliu             ###   ########.fr       */
+/*   Updated: 2023/02/20 11:18:17 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,17 @@ namespace ft{
         typedef typename Container::reference           reference;
         typedef typename Container::const_reference     const_reference;
         
-        explicit stack(const container_type& ctnr = container_type()): _containerVec(ctnr){}
+        explicit stack(const container_type& ctnr = container_type()): c(ctnr){}
         ~stack(){}
-        reference top(){return _containerVec.back();}
-        const_reference top() const {return this->_containerVec.back();}
-        bool empty() const {return this->_containerVec.empty();}
-        size_type size() const {return this->_containerVec.size();}
-        void push( const value_type& value ){return this->_containerVec.push_back(value);}
-        void pop(){return this->_containerVec.pop_back();}
+        reference top(){return c.back();}
+        const_reference top() const {return this->c.back();}
+        bool empty() const {return this->c.empty();}
+        size_type size() const {return this->c.size();}
+        void push( const value_type& value ){return this->c.push_back(value);}
+        void pop(){return this->c.pop_back();}
 
         friend bool operator== (const stack<T,Container>& lhs, const stack<T,Container>& rhs) {
-                        return lhs._containerVec == rhs._containerVec;
+                        return lhs.c == rhs.c;
                 }
                 
         friend bool operator!= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) {
@@ -43,7 +43,7 @@ namespace ft{
         }
         
         friend bool operator<  (const stack<T,Container>& lhs, const stack<T,Container>& rhs){
-            return lhs._containerVec < rhs._containerVec;
+            return lhs.c < rhs.c;
         }
         
         friend bool operator>  (const stack<T,Container>& lhs, const stack<T,Container>& rhs){
@@ -59,7 +59,7 @@ namespace ft{
         }
 
     protected:
-        container_type _containerVec;
+        container_type c;
     };
  
 }
