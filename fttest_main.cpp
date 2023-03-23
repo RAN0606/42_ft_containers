@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stdtest_main.cpp                                   :+:      :+:    :+:   */
+/*   fttest_main.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 19:47:23 by rliu              #+#    #+#             */
-/*   Updated: 2023/02/20 17:00:33 by rliu             ###   ########.fr       */
+/*   Updated: 2023/02/24 15:59:33 by rliu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
+#include <iostream>
 #include "container/vector.hpp"
 #include <vector>
 #include "container/stack.hpp"
@@ -25,9 +26,8 @@
 #include <set>
 
 #define TESTED_TYPE int
-#define TESTED_NAMESPACE std
+#define TESTED_NAMESPACE ft
 using namespace TESTED_NAMESPACE;
-
 
 template <typename T_STACK>
 void	printSize(T_STACK &stck)
@@ -525,7 +525,7 @@ void test_vector(void){
     test_cmp();
 }
 
-
+/***************************stack**************************/
 
 void stack_empty(){
   stack<int> mystack;
@@ -580,7 +580,7 @@ void stack_size(){
   std::cout << "2. size: " << myints.size() << '\n'; 
 }
 
-/***********************************STACK*********************/
+
 
 void stack_top(){
   stack<int> mystack;
@@ -614,7 +614,21 @@ struct classcomp {
   bool operator() (const char& lhs, const char& rhs) const
   {return lhs<rhs;}
 };
+void map_at ()
+{
+   map<char,int> mymap;
 
+  mymap['a']=10;
+  mymap['b']=30;
+  mymap['c']=50;
+  mymap['d']=70;
+  // mymap.at("a") = 40;
+  // mymap.at("b") = 50;
+  // mymap.at("c") = 60;
+
+  for (map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
+  }
 int map_construct ()
 {
   map<char,int> first;
@@ -1371,8 +1385,11 @@ void test_set(void){
 /*****************************************************/
 int main(){
     test_vector();
+    std::cout << "*******************************stack test*******************************************!" << std::endl;
     test_stack();
+    std::cout << "*******************************map test*******************************************!" << std::endl;
     test_map();
+    std::cout << "*******************************set test*******************************************!" << std::endl;
     test_set();
     
 return 0;

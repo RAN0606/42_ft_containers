@@ -6,7 +6,7 @@
 #    By: rliu <rliu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/17 20:00:30 by rliu              #+#    #+#              #
-#    Updated: 2023/02/20 17:01:39 by rliu             ###   ########.fr        #
+#    Updated: 2023/02/20 18:17:44 by rliu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,20 +15,13 @@ NAME = ft_container
 CC 	= c++
 
 CFLAGS 	= -Wall -Wextra -Werror -std=c++98 
-IFLAGS  = -I. -I./TEST
+
+IFLAGS  = -I./container
 
 $(NAME): mycontainer realcontainer	
-# SRCS := ./TEST/main.cpp \
-# 		./TEST/teststack.cpp \
-# 		./TEST/testvector.cpp \
-# 		./TEST/testmap.cpp \
-# 		./TEST/testset.cpp
-# mycontainer: ${SRCS} 
-# 		$(CC) $(CFLAGS) ${IFLAGS} -D TESTED_NAMESPACE=ft ${SRCS} -o ft_container 
-# realcontainer: ${SRCS} 
-# 		$(CC) $(CFLAGS) ${IFLAGS} -D TESTED_NAMESPACE=std ${SRCS} -o std_container 
 
 SRCS_FT = fttest_main.cpp
+
 SRCS_STD = stdtest_main.cpp
 
 %.o : %.cpp
@@ -42,7 +35,7 @@ mycontainer: ${OBJS_FT}
 realcontainer: ${OBJS_STD} 
 		$(CC) $(CFLAGS) ${IFLAGS} ${OBJS_STD} -o std_container 
 
-test: ft_container std_container
+test:
 	time ./std_container >stdresult; time ./ft_container>ftresult ; diff stdresult ftresult
 
 clean: 
